@@ -28,9 +28,8 @@ class FirePeople extends ioBaseIRCBotCommand {
      *
      * @see ioBaseIRCCommand#handle()
      */
-    public function handle($data) {
-        $matches = $this->parse($data[ioIRCConstants::$IRC_MSG]);
-        $who = $matches[1];
+    public function handle($data, $matches) {
+        $who = $matches[0];
         $who_key = strtolower($who);
 
         if (isset($this->people[$who_key])) {

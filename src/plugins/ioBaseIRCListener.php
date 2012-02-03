@@ -27,7 +27,7 @@ abstract class ioBaseIRCListener extends ioIRCCommand {
      */
     public function parse($line) {
         $matches = array();
-        preg_match('/' . $this->_captures . '/', $line, $matches);
+        preg_match('/' . $this->_pattern . '/', $line, $matches);
         return $matches;
     }
 }

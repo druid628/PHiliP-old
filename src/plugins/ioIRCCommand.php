@@ -25,11 +25,12 @@ abstract class ioIRCCommand {
     /**
      * Returns the response that should be printed into IRC
      *
-     * @param array $data The IRC message, split into parts
+     * @param array $data    The IRC message, split into parts
+     * @param array $matches The array of things that match the plugin-defined captures
      *
      * @return string The message to print back into the room or FALSE to print nothing
      */
-    public abstract function handle($data);
+    public abstract function handle($data, $matches);
 
     /**
      * Runs the message through the captures regex and returns the matches.
