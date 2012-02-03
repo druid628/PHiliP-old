@@ -5,7 +5,7 @@
  *
  * @author Bill Israel <bill.israel@gmail.com>
  */
-class FirePeople extends ioBaseIRCCommand {
+class FirePeople extends ioBaseIRCBotCommand {
     private $people = array();
 
     /**
@@ -13,32 +13,33 @@ class FirePeople extends ioBaseIRCCommand {
      *
      * @see ioBaseIRCCommand#__construct()
      */
-    public function __construct($pattern = '', $description = '') {
+    public function __construct($command = '', $captures = '', $description = '') {
         parent::__construct(
-            '/^!fire \b(\w+)\b/',
-            'This command fires Jarvis. And only fires Jarvis.'
+            'fire',
+            '\b(\w+)\b',
+            'This command "fires" people, and keeps a count of how many times they\'ve been fired.'
         );
 
         $this->startDate = date('m/d/Y');
     }
 
     /**
-     * "Fires" people.
+     * Fire people.
      *
      * @see ioBaseIRCCommand#handle()
      */
     public function handle($data) {
-        $matches = array();
-        preg_match($this->_pattern, $data[ioIRCConstants::$IRC_MSG], $matches);
+        $matches = $this->parse($data[ioIRCConstants::$IRC_MSG]);
         $who = $matches[1];
+        $who_key = strtolower($who);
 
-        if (isset($this->people[$who])) {
-            $this->people[$who] += 1;
+        if (isset($this->people[$who_key])) {
+            $this->people[$who_key] += 1;
         } else {
-            $this->people[$who] = 1;
+            $this->people[$who_key] = 1;
         }
 
-        $times = ($this->people[$who] == 1) ? 'time' : 'times';
-        return "$who, you're fired. That's {$this->people[$who]} $times since {$this->startDate}. Keep it up, asshole.";
+        $times = ($this->people[$who_key] == 1) ? 'time' : 'times';
+        return "$who, you're fired. That's {$this->people[$who_key]} $times since {$this->startDate}. Keep it up, asshole.";
     }
 }

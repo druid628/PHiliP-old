@@ -47,7 +47,7 @@ class ioIRCBot {
      * Attempts to log in as the user/nick specificed in the config.ini file
      */
     private function login() {
-        $this->send('USER', $this->_config['nick'] . ' gmail.com ' . ' gmail.com :' . $this->_config['name']);
+        $this->send('USER', $this->_config['nick'] . ' example.com ' . ' example.com :' . $this->_config['name']);
         $this->send('NICK', $this->_config['nick']);
 
         // TODO: Add error handling

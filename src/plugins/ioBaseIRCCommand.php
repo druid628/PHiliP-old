@@ -8,9 +8,7 @@
  *
  * @author Bill Israel <bill.israel@gmail.com>
  */
-abstract class ioBaseIRCCommand {
-    protected $pattern;
-    protected $description;
+abstract class ioBaseIRCBotCommand extends ioIRCCommand {
 
     /**
      * Takes the command pattern and a description of the command
@@ -18,39 +16,17 @@ abstract class ioBaseIRCCommand {
      * @param regex  $pattern     The pattern used to match against the IRC message
      * @param string $description A short description of the command.
      */
-    public function __construct($pattern = '', $description = '') {
-        $this->_pattern = $pattern;
+    public function __construct($command = '', $captures = '', $description = '') {
+        $this->_pattern = "/^:!$command\s+$captures/";
+        $this->_command = $command;
+        $this->_captures = $captures;
         $this->_description = $description;
     }
 
     /**
-     * Tests the given line to see if it matches the command's pattern
-     *
-     * @param string $line The message sent to IRC to test for a command
-     * 
-     * @return boolean True if the command matches, false otherwise
-     */
-    public function match($line) {
-        if (strpos($line, ':') === 0) {
-            $line = substr($line, 1);
-        }
-
-        return (bool) preg_match($this->_pattern, $line);
-    }
-
-    /**
-     * Returns the response that should be printed into IRC
-     *
-     * @param array $data The IRC message, split into parts
-     *
-     * @return string The message to print back into the room or FALSE to print nothing
+     * @see ioIRCCommand#handle()
      */
     public abstract function handle($data);
 
-    /**
-     * Just returns the command's description
-     */
-    public function __toString() {
-        return $this->_description;
-    }
+
 }

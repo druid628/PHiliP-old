@@ -48,7 +48,7 @@ class ioIRCCommandHandler {
     public function privmsg($parts) {
         $line = $parts[ioIRCConstants::$IRC_MSG];
         foreach ($this->_plugins as $plugin) {
-            if ($plugin->match($line)) {
+            if ($plugin->test($line)) {
                 $ret_msg = $plugin->handle($parts);
 
                 return 'PRIVMSG ' . $parts[ioIRCConstants::$IRC_CHAN] . " :$ret_msg";
