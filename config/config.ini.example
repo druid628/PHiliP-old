@@ -1,0 +1,13 @@
+; This is the ocnfig file for PHiliP.
+
+[irc]
+host = "irc.freenode.net"
+port = 6667
+name = "PHiliP_bot"
+password = "no_password!"
+nick = "PHiliP_bot"
+channel = "#PHilip-test"
+
+
+[database]
+
