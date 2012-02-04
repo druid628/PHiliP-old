@@ -6,7 +6,10 @@
  *
  * @author Bill Israel <bill.israel@gmail.com>
  */
-class ioIRCConstants {
+
+namespace PHiliP;
+
+class IRCConstants {
     public static $IRC_USER = 1;
     public static $IRC_CMD  = 2;
     public static $IRC_CHAN = 3;

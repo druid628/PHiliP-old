@@ -5,7 +5,10 @@
  *
  * @author Bill Israel <bill.israel@gmail.com>
  */
-abstract class ioIRCCommand {
+
+namespace PHiliP;
+
+abstract class IRCCommand {
     protected $_pattern;
     protected $_command;
     protected $_captures;

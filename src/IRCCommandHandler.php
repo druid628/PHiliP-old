@@ -6,7 +6,12 @@
  *
  * @author Bill Israel <bill.israel@gmail.com>
  */
-class ioIRCCommandHandler {
+
+namespace PHiliP;
+
+use PHiliP\IRCConstants;
+
+class IRCCommandHandler {
 
     /** @var array $_plugins The list of known plugins */
     public $_plugins;
@@ -27,7 +32,7 @@ class ioIRCCommandHandler {
      * @param array $parts The IRC message broken into parts
      */
     public function ping($parts) {
-        return "PONG :" . $parts[ioIRCConstants::$IRC_MSG];
+        return "PONG :" . $parts[IRCConstants::$IRC_MSG];
     }
 
     /**
@@ -46,13 +51,13 @@ class ioIRCCommandHandler {
      * @param array $parts The IRC message broken into parts
      */
     public function privmsg($parts) {
-        $line = $parts[ioIRCConstants::$IRC_MSG];
+        $line = $parts[IRCConstants::$IRC_MSG];
         foreach ($this->_plugins as $plugin) {
             if ($plugin->test($line)) {
                 $matches = $plugin->parse($line);
                 $ret_msg = $plugin->handle($parts, array_slice($matches, 1));
 
-                return 'PRIVMSG ' . $parts[ioIRCConstants::$IRC_CHAN] . " :$ret_msg";
+                return 'PRIVMSG ' . $parts[IRCConstants::$IRC_CHAN] . " :$ret_msg";
             }
         }
 

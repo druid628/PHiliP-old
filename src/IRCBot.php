@@ -6,7 +6,12 @@
  *
  * @author Bill Israel <bill.israel@gmail.com>
  */
-class ioIRCBot {
+
+namespace PHiliP;
+
+use PHiliP\IRCConstants;
+
+class IRCBot {
     private $_handler;
     private $_config;
     private $_socket;
@@ -85,8 +90,8 @@ class ioIRCBot {
         $response = false;
 
         // Get the IRC command from the message, and send it to a handler
-        if (isset($parts[ioIRCConstants::$IRC_CMD])) {
-            $cmd = strtolower($parts[ioIRCConstants::$IRC_CMD]);
+        if (isset($parts[IRCConstants::$IRC_CMD])) {
+            $cmd = strtolower($parts[IRCConstants::$IRC_CMD]);
 
             if (method_exists($this->_handler, $cmd)) { 
                 $response = $this->_handler->$cmd($parts);

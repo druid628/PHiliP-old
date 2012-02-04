@@ -7,23 +7,31 @@
  * PHiliP is an extensible PHP-based IRC bot and a work in progress.
  */
 
-require_once(dirname(__FILE__) . '/src/ioAutoloader.php');
+require_once(__DIR__ . '/src/Autoloader.php');
 
-$autoloader = new ioAutoloader(array(
+use PHiliP\Autoloader;
+use PHiliP\IRCCommandHandler;
+use PHiliP\IRCBot;
+
+$autoloader = new Autoloader(array(
     __DIR__ . '/src',
-    __DIR__ . '/src/plugins'
+    __DIR__ . '/plugins'
 ));
 $autoloader->register();
 
 // Load config and list plugins
+$plugins = array();
 $config = parse_ini_file('config/config.ini', true);
-$plugins = array(
-    new FirePeople()
-);
+foreach ($config['plugins'] as $plugin => $enabled) {
+    if ($enabled) {
+        $ns_plugin = '\PHiliP\Plugin\\' . $plugin;
+        $plugins[] = new $ns_plugin();
+    }
+}
 
 // Create copy of PHiliP app
-$handler = new ioIRCCommandHandler($plugins);
-$philip = new ioIRCBot($config['irc'], $handler);
+$handler = new IRCCommandHandler($plugins);
+$philip = new IRCBot($config['irc'], $handler);
 
 // Connect to IRC and join channel(s)
 if ($philip->connect()) {

@@ -5,7 +5,12 @@
  *
  * @author Bill Israel <bill.israel@gmail.com>
  */
-class FirePeople extends ioBaseIRCBotCommand {
+
+namespace PHiliP\Plugin;
+
+use PHiliP\BaseIRCBotCommand;
+
+class FirePeople extends BaseIRCBotCommand {
     private $people = array();
 
     /**

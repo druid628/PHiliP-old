@@ -10,7 +10,12 @@
  *
  * @author Bill Israel <bill.israel@gmail.com>
  */
-abstract class ioBaseIRCBotCommand extends ioIRCCommand {
+
+namespace PHiliP;
+
+use PHiliP\IRCCommand;
+
+abstract class BaseIRCBotCommand extends IRCCommand {
     protected $_pattern;
     protected $_command;
     protected $_captures;

@@ -6,7 +6,12 @@
  *
  * @author Bill Israel <bill.israel@gmail.com>
  */
-abstract class ioBaseIRCListener extends ioIRCCommand {
+
+namespace PHiliP;
+
+use PHiliP\IRCCommand;
+
+abstract class BaseIRCListener extends IRCCommand {
     protected $_pattern;
     protected $_captures;
     protected $_description;
