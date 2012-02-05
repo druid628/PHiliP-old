@@ -31,6 +31,7 @@ abstract class BaseBotCommand extends BotPlugin {
         $this->_description = $description;
     }
 
+
     /**
      * Removes the command from the line before testing it for something to capture.
      *
@@ -40,7 +41,7 @@ abstract class BaseBotCommand extends BotPlugin {
         $matches = array();
 
 		if (!empty($this->_captures)) {
-			$line = str_replace("!{$this->_command}", '', $line);
+			$line = preg_replace($this->_pattern, '', $line);
 			preg_match("/{$this->_captures}/", $line, $matches);
 		}
 

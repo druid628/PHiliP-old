@@ -21,3 +21,10 @@ channel = "#PHilip-test"
 FirePeople = 1
 Quit = 1
 
+
+; Example of configuring plugins
+; Configuration sections match plugin names
+; Arrays of values are passed to the plugin's init() method.
+[Quit]
+allowed_users = bob, steve, larry
+

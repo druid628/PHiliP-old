@@ -9,10 +9,29 @@
 namespace PHiliP;
 
 abstract class BotPlugin {
+
+    /** @var string $_pattern The regular expression to test against. */
     protected $_pattern;
+
+    /** @var string $_command The command name. */
     protected $_command;
+
+    /** @var string $_captures The regular expression that captures parameters. */
     protected $_captures;
+
+    /** @var string $_description A description of the plugin. */
     protected $_description;
+
+
+    /**
+     * Initializes the plugin.
+     *
+     * @param array $options The options to use when initializing
+     */
+    public function init($options = array()) {
+        // Plugins should only override this if they have initialization to do.
+    }
+
 
     /**
      * Tests the given line to see if it matches the command's pattern
@@ -25,6 +44,7 @@ abstract class BotPlugin {
         return (bool) preg_match($this->_pattern, $line);
     }
 
+
     /**
      * Returns the response that should be printed into IRC
      *
@@ -35,12 +55,14 @@ abstract class BotPlugin {
      */
     public abstract function handle($req, $matches);
 
+
     /**
      * Runs the message through the captures regex and returns the matches.
      *
      * @param string $line The line to match against.
      */
     public abstract function parse($line);
+
 
     /**
      * Just returns the command's description

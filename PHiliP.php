@@ -24,8 +24,13 @@ $plugins = array();
 $config = parse_ini_file('config/config.ini', true);
 foreach ($config['plugins'] as $plugin => $enabled) {
     if ($enabled) {
-        $ns_plugin = '\PHiliP\Plugin\\' . $plugin;
-        $plugins[] = new $ns_plugin();
+        $ns_plugin  = '\PHiliP\Plugin\\' . $plugin;
+        $plugins[]  = $new_plugin = new $ns_plugin();
+
+        // If there's initialization to do, do it here.
+        if (isset($config[$plugin]) && is_array($config[$plugin])) {
+            $new_plugin->init($config[$plugin]);
+        }
     }
 }
 
