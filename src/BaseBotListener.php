@@ -12,9 +12,6 @@ namespace PHiliP;
 use PHiliP\BotPlugin;
 
 abstract class BaseListener extends BotPlugin {
-    protected $_pattern;
-    protected $_captures;
-    protected $_description;
 
     /**
      * Takes the command pattern and a description of the command

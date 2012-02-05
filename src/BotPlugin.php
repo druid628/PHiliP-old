@@ -19,7 +19,7 @@ abstract class BotPlugin {
      *
      * @param string $line The message sent to IRC to test for a command
      * 
-     * @return boolean True if the command matches, false otherwise
+     * @return bool True if the command matches, false otherwise
      */
     public function test($line) {
         return (bool) preg_match($this->_pattern, $line);
@@ -28,22 +28,19 @@ abstract class BotPlugin {
     /**
      * Returns the response that should be printed into IRC
      *
-     * @param array $data    The IRC message, split into parts
+     * @param array $req    The IRC request object
      * @param array $matches The array of things that match the plugin-defined captures
      *
-     * @return string The message to print back into the room or FALSE to print nothing
+     * @return Response The IRC Response object to be sent back to the server
      */
-    public abstract function handle($data, $matches);
+    public abstract function handle($req, $matches);
 
     /**
      * Runs the message through the captures regex and returns the matches.
      *
      * @param string $line The line to match against.
      */
-    public function parse($line) {
-        $this->_matches = array();
-        preg_match($this->_captures, $line, $this->_matches);
-    }
+    public abstract function parse($line);
 
     /**
      * Just returns the command's description

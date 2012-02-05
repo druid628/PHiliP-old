@@ -16,10 +16,6 @@ namespace PHiliP;
 use PHiliP\BotPlugin;
 
 abstract class BaseBotCommand extends BotPlugin {
-    protected $_pattern;
-    protected $_command;
-    protected $_captures;
-    protected $_description;
 
     /**
      * Takes the command pattern and a description of the command
@@ -29,7 +25,7 @@ abstract class BaseBotCommand extends BotPlugin {
      * @param string $description A short description of the command.
      */
     public function __construct($command = '', $captures = '', $description = '') {
-        $this->_pattern = '/^!' . $command . '\s+' . $captures . '/';
+        $this->_pattern = '/^!' . $command . '\s+/';
         $this->_command = $command;
         $this->_captures = $captures;
         $this->_description = $description;
@@ -42,8 +38,12 @@ abstract class BaseBotCommand extends BotPlugin {
      */
     public function parse($line) {
         $matches = array();
-        $line = str_replace("!{$this->_command}", '', $line);
-        preg_match("/{$this->_captures}/", $line, $matches);
+
+		if (!empty($this->_captures)) {
+			$line = str_replace("!{$this->_command}", '', $line);
+			preg_match("/{$this->_captures}/", $line, $matches);
+		}
+
         return $matches;
     }
 }

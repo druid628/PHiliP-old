@@ -9,6 +9,8 @@
 namespace PHiliP\Plugin;
 
 use PHiliP\BaseBotCommand;
+use PHiliP\IRC\Request;
+use PHiliP\IRC\Response;
 
 class FirePeople extends BaseBotCommand {
     private $people = array();
@@ -33,17 +35,22 @@ class FirePeople extends BaseBotCommand {
      *
      * @see BaseBotCommand#handle()
      */
-    public function handle($data, $matches) {
+    public function handle($req, $matches) {
         $who = $matches[0];
-        $who_key = strtolower($who);
+        $key = strtolower($who);
 
-        if (isset($this->people[$who_key])) {
-            $this->people[$who_key] += 1;
+        if (isset($this->people[$key])) {
+            $this->people[$key] += 1;
         } else {
-            $this->people[$who_key] = 1;
+            $this->people[$key] = 1;
         }
 
-        $times = ($this->people[$who_key] == 1) ? 'time' : 'times';
-        return "$who, you're fired. That's {$this->people[$who_key]} $times since {$this->startDate}. Keep it up, asshole.";
+		$count = $this->people[$key];
+        $times = ($count === 1) ? 'time' : 'times';
+        $msg = "$who, you're fired. That's $count $times since {$this->startDate}. Keep it up, asshole.";
+		return new Response('PRIVMSG', array(
+			$req->getSource(),
+			$msg
+		));
     }
 }

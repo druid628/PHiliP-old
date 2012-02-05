@@ -9,7 +9,8 @@
 
 namespace PHiliP;
 
-use PHiliP\IRCConstants;
+use PHiliP\IRC\Request;
+use PHiliP\IRC\Response;
 
 class IRCCommandHandler {
 
@@ -26,59 +27,65 @@ class IRCCommandHandler {
         $this->_plugins = $plugins;
     }
 
+
+    /**
+     * If there's a command, and there's a method here that
+     * matches the command name, send the request to it to 
+     * handle.
+     *
+     * @param Request $request The IRC request object
+     *
+     * @return mixed The IRC Response object to send, or false otherwise
+     */
+    public function handle($request) {
+        if ($cmd = strtolower($request->getCommand())) {
+            if (method_exists($this, $cmd)) {
+                return $this->$cmd($request);
+            } 
+        }
+        
+        return false;
+    }
+
+
     /**
      * PING command handler; just responds to PING commands with an appropriate PONG.
      *
-     * @param array $parts The IRC message broken into parts
+     * @param Request $req The IRC Request object
+     *
+     * @return Response The IRC Response object to send back
      */
-    public function ping($parts) {
-        return "PONG :" . $parts[IRCConstants::$IRC_MSG];
+    private function ping($req) {
+        return new Response('PONG', $req->getMessage());
     }
+
 
     /**
      * For now, don't handle this gracefully, just panic and exit.
      *
-     * @param array $parts The IRC message broken into parts
+     * @param Request $req The IRC Request object
      */
-    public function error($parts) {
+    private function error($req) {
         exit(2);
     }
+
 
     /**
      * PRIVMSG commands will loop through the list of given plugins
      * and try to find a bot command that knows how to handle a line like this.
      * 
-     * @param array $parts The IRC message broken into parts
+     * @param Request $req The IRC Request object
+     *
+     * @return mixed The IRC Response object to send, or false otherwise
      */
-    public function privmsg($parts) {
-        $line = $parts[IRCConstants::$IRC_MSG];
+    private function privmsg($req) {
         foreach ($this->_plugins as $plugin) {
-            if ($plugin->test($line)) {
-                $matches = $plugin->parse($line);
-                $ret_msg = $plugin->handle($parts, array_slice($matches, 1));
-
-                return 'PRIVMSG ' . $parts[IRCConstants::$IRC_CHAN] . " :$ret_msg";
+            if ($plugin->test($req->getMessage())) {
+                $matches = $plugin->parse($req->getMessage());
+                return $plugin->handle($req, $matches);
             }
         }
 
-        return false;
-    }
-
-    /**
-     * It should be safe to ignore NOTICE messages for now, right?
-     *
-     * @param array $parts The IRC message broken into parts
-     */
-    public function notice($parts) {
-        return false;
-    }
-
-    /**
-     * It should be safe to ignore MODE messages for now, right?
-     *
-     * @param array $parts The IRC message broken into parts
-     */
-    public function mode($parts) {
         return false;
     }
 }

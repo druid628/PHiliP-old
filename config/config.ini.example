@@ -9,13 +9,15 @@ nick = "PHiliP_bot"
 channel = "#PHilip-test"
 
 
-; Enter database information here
+; Enter database information here.
 ; Could be used by plugins if they needed persistent data
+; Not implemented yet
 [database]
 
 
-; List plugins here
-; Expected format:
-;   PluginClassName = [1|0] (1 = enabled, 0 = disabled)
+; List plugins here.
+; Format: PluginClassName = [1|0] (1 = enabled, 0 = disabled)
 [plugins]
 FirePeople = 1
+Quit = 1
+
