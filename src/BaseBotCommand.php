@@ -13,9 +13,9 @@
 
 namespace PHiliP;
 
-use PHiliP\IRCCommand;
+use PHiliP\BotPlugin;
 
-abstract class BaseIRCBotCommand extends IRCCommand {
+abstract class BaseBotCommand extends BotPlugin {
     protected $_pattern;
     protected $_command;
     protected $_captures;
@@ -38,7 +38,7 @@ abstract class BaseIRCBotCommand extends IRCCommand {
     /**
      * Removes the command from the line before testing it for something to capture.
      *
-     * @see ioIRCCommand#parse()
+     * @see BotPlugin#parse()
      */
     public function parse($line) {
         $matches = array();

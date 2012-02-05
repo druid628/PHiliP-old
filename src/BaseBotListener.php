@@ -9,9 +9,9 @@
 
 namespace PHiliP;
 
-use PHiliP\IRCCommand;
+use PHiliP\BotPlugin;
 
-abstract class BaseIRCListener extends IRCCommand {
+abstract class BaseListener extends BotPlugin {
     protected $_pattern;
     protected $_captures;
     protected $_description;
@@ -28,7 +28,7 @@ abstract class BaseIRCListener extends IRCCommand {
     }
 
     /**
-     * @see ioIRCCommand#parse()
+     * @see BotPlugin#parse()
      */
     public function parse($line) {
         $matches = array();

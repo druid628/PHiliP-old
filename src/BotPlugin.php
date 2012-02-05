@@ -8,7 +8,7 @@
 
 namespace PHiliP;
 
-abstract class IRCCommand {
+abstract class BotPlugin {
     protected $_pattern;
     protected $_command;
     protected $_captures;

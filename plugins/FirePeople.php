@@ -8,15 +8,15 @@
 
 namespace PHiliP\Plugin;
 
-use PHiliP\BaseIRCBotCommand;
+use PHiliP\BaseBotCommand;
 
-class FirePeople extends BaseIRCBotCommand {
+class FirePeople extends BaseBotCommand {
     private $people = array();
 
     /**
      * Calls the parent constructor to set up the pattern and the description.
      *
-     * @see ioBaseIRCCommand#__construct()
+     * @see BaseBotCommand#__construct()
      */
     public function __construct($command = '', $captures = '', $description = '') {
         parent::__construct(
@@ -31,7 +31,7 @@ class FirePeople extends BaseIRCBotCommand {
     /**
      * Fire people.
      *
-     * @see ioBaseIRCCommand#handle()
+     * @see BaseBotCommand#handle()
      */
     public function handle($data, $matches) {
         $who = $matches[0];
