@@ -21,7 +21,7 @@ channel = "#PHilip-test"
 [plugins]
 FirePeople = 1
 Quit = 1
-
+Hello = 1
 
 ; Example of configuring plugins
 ; Configuration sections match plugin names
