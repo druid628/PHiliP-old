@@ -39,7 +39,7 @@ class Hello extends BaseBotListener {
 	public function handle($req, $matches) {
 		return new Response('PRIVMSG', array(
 			$req->getSource(),
-			"Hi {$req->getSendingUser()}. Can I help you with something?"
+			"Hi {$req->getSendingUser()}. May I help you with something?"
 		));
 	}
 
