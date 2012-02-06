@@ -2,7 +2,7 @@
 
 [irc]
 hostname = "irc.freenode.net"
-servername = "irc.freenode.net"
+servername = "example.com"
 port = 6667
 realname = "PHiliP_bot"
 password = "no_password!"
@@ -19,8 +19,15 @@ channel = "#PHilip-test"
 ; List plugins here.
 ; Format: PluginClassName = [1|0] (1 = enabled, 0 = disabled)
 [plugins]
+
+; Commmands
 FirePeople = 1
 Quit = 1
+Join = 1
+Leave = 1
+
+; Listeners
+Hello = 1
 
 
 ; Example of configuring plugins
@@ -29,3 +36,8 @@ Quit = 1
 [Quit]
 allowed_users = bob, steve, larry
 
+[Join]
+allowed_users = bob, steve, larry
+
+[Leave]
+allowed_users = bob, steve, larry

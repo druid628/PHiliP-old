@@ -64,9 +64,11 @@ class IRCCommandHandler {
      * For now, don't handle this gracefully, just panic and exit.
      *
      * @param Request $req The IRC Request object
+	 *
+	 * @return Response A QUIT IRC Response object
      */
     private function error($req) {
-        exit(2);
+		return new Response('QUIT', 'Received ERROR');
     }
 
 
