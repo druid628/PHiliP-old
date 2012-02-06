@@ -11,7 +11,7 @@ namespace PHiliP;
 
 use PHiliP\BotPlugin;
 
-abstract class BaseListener extends BotPlugin {
+abstract class BaseBotListener extends BotPlugin {
 
     /**
      * Takes the command pattern and a description of the command
@@ -20,7 +20,7 @@ abstract class BaseListener extends BotPlugin {
      * @param string $description A short description of the command.
      */
     public function __construct($pattern = '', $description = '') {
-        $this->_pattern = $pattern;
+		$this->_pattern = '/' . $pattern . '/';
         $this->_description = $description;
     }
 
@@ -29,7 +29,7 @@ abstract class BaseListener extends BotPlugin {
      */
     public function parse($line) {
         $matches = array();
-        preg_match('/' . $this->_pattern . '/', $line, $matches);
+        preg_match($this->_pattern, $line, $matches);
         return $matches;
     }
 }

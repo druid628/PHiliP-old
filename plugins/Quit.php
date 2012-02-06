@@ -15,7 +15,7 @@ use PHiliP\IRC\Response;
 class Quit extends BaseBotCommand {
 
     /** @var array $_allowedUsers An array of nicks allowed to quit the bot */
-    private $_allowedUsers = array();
+    private $_allowedUsers;
 
 
     /**
@@ -38,14 +38,14 @@ class Quit extends BaseBotCommand {
      * @see BotPlugin#init()
      */
     public function init($options = array()) {
-        $this->_allowedUsers = explode(',', $options['allowed_users']);
+        $this->_allowedUsers = array_map('trim', explode(', ', $options['allowed_users']));
     }
 
 
     /**
      * The bot will quit, if the requestor is allowed to tell it to.
      *
-     * @see BaseBotCommand#handle()
+     * @see BotPlugin#handle()
      */
 	public function handle($req, $matches) {
 		if ($req->isPrivateMessage() && $this->isAllowed($req->getSendingUser())) {
@@ -54,6 +54,8 @@ class Quit extends BaseBotCommand {
 				$matches[1]
 			);
 		}
+
+		return new Response('PRIVMSG', array($req->getSource(), "You can't tell me what to do."));
 	}
 
 
