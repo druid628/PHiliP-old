@@ -62,7 +62,7 @@ class IRCBot {
     private function login() {
 		$this->send(new Response('USER', array(
 			$this->_config['nick'],
-			$this->_config['hostname'],
+			$this->_config['host'],
 			$this->_config['servername'],
 			$this->_config['realname']
 		)));
