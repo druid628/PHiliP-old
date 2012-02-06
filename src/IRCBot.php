@@ -43,7 +43,7 @@ class IRCBot {
      * Connects to the IRC server and port specified in the config.ini file
      */
     public function connect() {
-        $this->_socket = fsockopen($this->_config['host'], $this->_config['port']);
+        $this->_socket = fsockopen($this->_config['hostname'], $this->_config['port']);
         stream_set_blocking(STDIN, 0);
 
 		if ($this->_socket) {
@@ -62,7 +62,7 @@ class IRCBot {
     private function login() {
 		$this->send(new Response('USER', array(
 			$this->_config['nick'],
-			$this->_config['host'],
+			$this->_config['hostname'],
 			$this->_config['servername'],
 			$this->_config['realname']
 		)));
