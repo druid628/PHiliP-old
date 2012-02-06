@@ -2,6 +2,7 @@
 
 [irc]
 host = "irc.freenode.net"
+servername = "irc.freenode.net"
 port = 6667
 realname = "PHiliP_bot"
 password = "no_password!"
