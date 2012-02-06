@@ -25,9 +25,9 @@ abstract class BaseBotCommand extends BotPlugin {
      * @param string $description A short description of the command.
      */
     public function __construct($command = '', $captures = '', $description = '') {
-        $this->_pattern = '/^!' . $command . '\s+/';
-        $this->_command = $command;
-        $this->_captures = $captures;
+        $this->_pattern     = '/^!' . $command . '\b/';
+        $this->_command     = $command;
+        $this->_captures    = $captures;
         $this->_description = $description;
     }
 
