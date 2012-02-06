@@ -2,8 +2,9 @@
 
 [irc]
 host = "irc.freenode.net"
+servername = "irc.freenode.net"
 port = 6667
-name = "PHiliP_bot"
+realname = "PHiliP_bot"
 password = "no_password!"
 nick = "PHiliP_bot"
 channel = "#PHilip-test"
