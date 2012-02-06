@@ -38,7 +38,7 @@ class Quit extends BaseBotCommand {
      * @see BotPlugin#init()
      */
     public function init($options = array()) {
-        $this->_allowedUsers = explode(',', $options['allowed_users']);
+        $this->_allowedUsers = array_map('trim', explode(', ', $options['allowed_users']));
     }
 
 
