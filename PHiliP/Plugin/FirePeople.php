@@ -59,7 +59,7 @@ class FirePeople extends BotPlugin {
 
 		$count = $this->_people[$key];
         $times = ($count === 1) ? 'time' : 'times';
-        $msg = "$who, you're fired. That's $count $times since {$this->startDate}. Keep it up, asshole.";
+        $msg = "$who, you're fired! That's $count $times since {$this->_start_date}. Keep it up, asshole.";
 		$event->setReturnValue(new Response('PRIVMSG', array($req->getSource(), $msg)));
     }
 }

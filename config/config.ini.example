@@ -18,6 +18,7 @@ channel = "#PHilip-test"
 ; List plugins here.
 ; Format: PluginClassName = [1|0] (1 = enabled, 0 = disabled)
 [plugins]
+IRCCommands = 1
 FirePeople = 1
 Quit = 1
 Hello = 1

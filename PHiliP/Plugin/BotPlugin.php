@@ -9,6 +9,8 @@ namespace PHiliP\Plugin;
  */
 
 use \sfEvent;
+
+use PHiliP\Utilities;
 use PHiliP\IRC\Response;
 
 abstract class BotPlugin {
@@ -50,7 +52,7 @@ abstract class BotPlugin {
      * @return array The array of matches
      */
     protected function parse($msg) {
-        if ($this->isCommand($msg)) {
+        if (Utilities::isBotCommand($msg)) {
             if (($where = strpos($msg, ' ')) !== false) {
                 $msg = trim(substr($msg, $where));
             }
@@ -60,16 +62,5 @@ abstract class BotPlugin {
         preg_match($this->_captures, $msg, $matches);
 
         return array_slice($matches, 1);
-    }
-
-    /**
-     * Checks to see if the message is a command.
-     *
-     * @param string $msg The IRC message
-     *
-     * @return bool True if the message is a command, false otherwise
-     */
-    private function isCommand($msg) {
-        return strpos($msg, '!') === 0;
     }
 }

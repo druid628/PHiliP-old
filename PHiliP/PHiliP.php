@@ -9,6 +9,7 @@ namespace PHiliP;
  * @author Bill Israel <bill.israel@gmail.com>
  */
 
+use PHiliP\Utilities;
 use PHiliP\IRC\Request;
 use PHiliP\IRC\Response;
 use PHiliP\Event\PHiliPEvent;
@@ -143,7 +144,7 @@ class PHiliP extends Pimple {
                 $cmd = strtolower($req->getCommand());
 
                 $msg = $req->getMessage();
-                if ($cmd === 'privmsg' && $this->isBotCommand($msg)) {
+                if ($cmd === 'privmsg' && Utilities::isBotCommand($msg)) {
                     $break = strpos($msg, ' ');
                     $msg = ($break !== false) ? substr($msg, 0, $break) : $msg;
                     $bot_cmd = ltrim($msg, '!');
@@ -176,22 +177,5 @@ class PHiliP extends Pimple {
     private function send($response) {
         fwrite($this->_socket, $response . "\r\n");
         fwrite(STDOUT, '<-- ' . $response . PHP_EOL);
-    }
-
-
-    /**
-     * Returns true if the message contains a bot command.
-     *
-     * Bot commands are defined as messages that being with the user-configured
-     * command prefix followed by a command word.
-     *
-     * Ex: !quit or !join (if the user defined '!' as the command prefix)
-     *
-     * @param string $msg The message to test
-     *
-     * @return bool True if the message contains a command, false otherwise
-     */
-    private function isBotCommand($msg) {
-        return strpos($msg, '!') === 0;
     }
 }
