@@ -30,24 +30,22 @@ class FirePeople extends BotPlugin {
 	 * Attaches to the bot.command.fire event.
      */
     public function __construct($dispatcher) {
-        $this->_captures = '/\b(\w+)\b/';
-        $this->_help_msg = "!fire <someone>: Keeps count of how many times someone's been fired.";
-        $this->_start_date = date('m/d/Y');
+        $this->registerCommand($dispatcher,
+            'fire',
+            '/\b(\w+)\b/',
+            "!fire <someone>: Keeps count of how many times someone's been fired."
+        );
 
-		$dispatcher->connect('bot.command.fire', array($this, 'handle'));
-        $this->registerHelp($dispatcher);
+        $this->_start_date = date('m/d/Y');
     }
 
 
     /**
      * Fire someone.
 	 *
-	 * @param sfEvent $event The event to handle
+     * @see BotPlugin#handle()
      */
-    public function handle(sfEvent $event) {
-        $req = $event['request'];
-        $matches = $this->parse($req->getMessage());
-
+    public function handle($req, $conf, $matches) {
         $who = $matches[0];
         $key = strtolower($who);
 
@@ -60,6 +58,7 @@ class FirePeople extends BotPlugin {
 		$count = $this->_people[$key];
         $times = ($count === 1) ? 'time' : 'times';
         $msg = "$who, you're fired! That's $count $times since {$this->_start_date}. Keep it up, asshole.";
-		$event->setReturnValue(new Response('PRIVMSG', array($req->getSource(), $msg)));
+
+		return new Response('PRIVMSG', array($req->getSource(), $msg));
     }
 }

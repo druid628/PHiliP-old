@@ -24,10 +24,8 @@ class Hello extends BotPlugin {
      * Constructor.
      */
     public function __construct($dispatcher) {
-        $this->_captures = ''; // no need to capture anything for this one
-        $this->_help_msg = "Listens for the bot's name, and says hello back.";
-
-        $dispatcher->connect('server.command.privmsg', array($this, 'handle'));
+        // no need to capture anything for this one
+        $this->registerListener($dispatcher, '');
     }
 
     /**
@@ -35,14 +33,13 @@ class Hello extends BotPlugin {
      *
      * @see BotPlugin#handle()
      */
-    public function handle(sfEvent $event) {
-        $req = $event['request'];
+    public function handle($req, $conf, $matches) {
         $nick = $event['config']['irc']['nick'];
         if ($this->test($req->getMessage(), $nick)) {
-            $event->setReturnValue(new Response('PRIVMSG', array(
+            return new Response('PRIVMSG', array(
                 $req->getSource(),
                 "Hi, {$req->getSendingUser()}! /msg '!help' to me to see a list of available commands."
-            )));
+            ));
         }
     }
 

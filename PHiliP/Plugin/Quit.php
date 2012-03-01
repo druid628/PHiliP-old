@@ -24,11 +24,11 @@ class Quit extends BotPlugin {
      * Constructor.
      */
 	public function __construct($dispatcher) {
-        $this->_captures = '/(.*)/';
-        $this->_help_msg = '!quit <msg>: Disconnect the bot from the server.';
-
-        $dispatcher->connect('bot.command.quit', array($this, 'handle'));
-        $this->registerHelp($dispatcher);
+        $this->registerCommand($dispatcher,
+            'quit',
+            '/(.*)/',
+            '!quit <msg>: Disconnect the bot from the server.'
+        );
 	}
 
 
@@ -45,22 +45,16 @@ class Quit extends BotPlugin {
      *
      * @see BotPlugin#handle()
      */
-	public function handle(sfEvent $event) {
-        $req = $event['request'];
-        $matches = $this->parse($req->getMessage());
-
+	public function handle($req, $conf, $matches) {
 		if ($req->isPrivateMessage() && $this->isAllowed($req->getSendingUser())) {
-            $event->setReturnValue(
-                new Response('QUIT', $matches[0])
-            );
-        } else {
-            $event->setReturnValue(
-                new Response('PRIVMSG', array(
-                    $req->getSource(),
-                    "You're not the boss of me."
-                ))
-            );
+            $msg = $matches[0] == '!quit' ? 'Goodbye.' : $matches[0];
+            return new Response('QUIT', $msg);
         }
+
+        return new Response('PRIVMSG', array(
+            $req->getSource(),
+            "You're not the boss of me."
+        ));
 	}
 
 
