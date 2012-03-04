@@ -20,7 +20,11 @@ class PHiliPEvent extends sfEvent {
      * @see sfEvent#setReturnValue()
      */
     public function setReturnValue($value) {
-        array_push($this->_responses, $value); 
+        if (is_array($value)) {
+            $this->_responses = array_merge($this->_responses, $value);
+        } else {
+            array_push($this->_responses, $value); 
+        }
     }
 
     /**

@@ -16,13 +16,19 @@ use PHiliP\IRC\Response;
 abstract class BotPlugin {
     
     /** @var string $_help_msg The plugin's help message */
-    protected $_help_msg;
+    protected $_help_msg = array();
 
     /** @var string $_captures A regular expression defining "parameters" for the plugin */
     protected $_captures;
 
+    /** @var bool $_registered_help Have we already registered the help handler? */
+    private $_registered_help = false;
+
     /** @var bool $_is_command Is this plugin a command? */
     private $_is_command;
+
+    /** @var string $_bot_command The bot command being issued */
+    private $_bot_command;
 
     /**
      * Registers a bot command.
@@ -33,12 +39,16 @@ abstract class BotPlugin {
      * @param string            $help_msg   Help message for the command
      */
     public function registerCommand($dispatcher, $name, $captures, $help_msg) {
-        $this->_captures = $captures;
-        $this->_help_msg = $help_msg;
         $this->_is_command = true;
+        $this->_captures = $captures;
+        array_push($this->_help_msg, $help_msg);
+
+        if (!$this->_registered_help) {
+            $dispatcher->connect('bot.command.help', array($this, 'getHelpMessage'));
+            $this->_registered_help = true;
+        }
 
         $dispatcher->connect("bot.command.$name", array($this, 'handleIncoming'));
-        $dispatcher->connect('bot.command.help', array($this, 'getHelpMessage'));
     }
 
     /**
@@ -81,11 +91,16 @@ abstract class BotPlugin {
     public function getHelpMessage(sfEvent $event) {
         $req = $event['request'];
         $src = $req->isPrivateMessage() ? $req->getSource : $req->getSendingUser();
+        $helps = array();
 
-        $event->setReturnValue(new Response('PRIVMSG', array(
-            $src,
-            $this->_help_msg))
-        );
+        foreach ($this->_help_msg as $msg) {
+            array_push($helps, new Response('PRIVMSG', array(
+                $src,
+                $msg
+            )));
+        }
+
+        $event->setReturnValue($helps);
     }
 
     /**
@@ -102,7 +117,11 @@ abstract class BotPlugin {
             // off the command and just capture against
             // the message.
             if (($where = strpos($msg, ' ')) !== false) {
+                $this->_bot_command = trim(substr($msg, 1, $where));
                 $msg = trim(substr($msg, $where));
+            } else {
+                $this->_bot_command = trim($msg, '!');
+                $msg = '';
             }
         }
 
@@ -112,9 +131,21 @@ abstract class BotPlugin {
         return array_slice($matches, 1);
     }
 
+
     /**
-     * Implemented by command and listeners, does the 'meaty' work
-     * of actually doing something and responding to the IRC message.
+     * Returns the bot command being issued.
+     *
+     * @return string The command being issued
+     */
+    protected function getBotCommand() {
+        return $this->_bot_command;
+    }
+
+
+    /**
+     * Should be overriden by command and listeners.
+     * Does the 'meaty' work of actually doing something and
+     * responding to the IRC message.
      *
      * @param Request $req     The IRC Request
      * @param array   $conf    The configuration array
@@ -122,5 +153,7 @@ abstract class BotPlugin {
      *
      * @return Response The IRC response to send back to the server
      */
-    abstract function handle($req, $conf, $matches);
+    public function handle($req, $conf, $matches) {
+        // implemented by commands and listeners
+    }
 }

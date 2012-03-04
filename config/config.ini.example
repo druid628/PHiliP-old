@@ -19,14 +19,14 @@ channel = "#PHilip-test"
 ; Format: PluginClassName = [1|0] (1 = enabled, 0 = disabled)
 [plugins]
 IRCCommands = 1
+ConnManager = 1
 FirePeople = 1
-Quit = 1
 Hello = 1
 
 
 ; Example of configuring plugins
 ; Configuration sections match plugin names
 ; Arrays of values are passed to the plugin's init() method.
-[Quit]
+[ConnManager]
 allowed_users = bob, steve, larry
 
