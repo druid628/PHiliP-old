@@ -144,7 +144,7 @@ class PHiliP extends Pimple {
                 $cmd = strtolower($req->getCommand());
 
                 $msg = $req->getMessage();
-                if ($cmd === 'privmsg' && Utilities::isBotCommand($msg)) {
+                if ($cmd === 'privmsg' && $this->isBotCommand($msg)) {
                     $break = strpos($msg, ' ');
                     $msg = ($break !== false) ? substr($msg, 0, $break) : $msg;
                     $bot_cmd = ltrim($msg, '!');
@@ -177,5 +177,18 @@ class PHiliP extends Pimple {
     private function send($response) {
         fwrite($this->_socket, $response . "\r\n");
         fwrite(STDOUT, '<-- ' . $response . PHP_EOL);
+    }
+
+
+    /**
+     * Returns whether the given message is a bot command,
+     * as determined by whether it starts with a !
+     *
+     * @param string $msg The message to test
+     *
+     * @return bool True if the message is a bot command, false otherwise
+     */
+    private function isBotCommand($msg) {
+        return strpos($msg, '!') === 0;
     }
 }

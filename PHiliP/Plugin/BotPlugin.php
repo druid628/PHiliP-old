@@ -16,7 +16,7 @@ use PHiliP\IRC\Response;
 abstract class BotPlugin {
     
     /** @var string $_help_msg The plugin's help message */
-    protected $_help_msg = array();
+    protected $_help_msgs = array();
 
     /** @var string $_captures A regular expression defining "parameters" for the plugin */
     protected $_captures;
@@ -34,21 +34,23 @@ abstract class BotPlugin {
      * Registers a bot command.
      *
      * @param sfEventDispatcher $dispatcher For connecting the event
-     * @param string            $name       The name of the command
+     * @param string|array      $names      The name(s) of the command(s)
      * @param string            $captures   RegEx for capturing parameters
-     * @param string            $help_msg   Help message for the command
+     * @param string|array      $help_msgs  Help message(s) for the command(s)
      */
-    public function registerCommand($dispatcher, $name, $captures, $help_msg) {
+    protected function registerCommand($dispatcher, $names, $captures, $help_msgs) {
         $this->_is_command = true;
         $this->_captures = $captures;
-        array_push($this->_help_msg, $help_msg);
 
-        if (!$this->_registered_help) {
-            $dispatcher->connect('bot.command.help', array($this, 'getHelpMessage'));
-            $this->_registered_help = true;
+        if (!is_array($names)) {
+            $names = array($names);
         }
 
-        $dispatcher->connect("bot.command.$name", array($this, 'handleIncoming'));
+        foreach ($names as $name) {
+            $dispatcher->connect("bot.command.$name", array($this, 'handleIncoming'));
+        }
+
+        $this->registerHelpMessage($dispatcher, $help_msgs);
     }
 
     /**
@@ -60,10 +62,29 @@ abstract class BotPlugin {
      * @param sfEventDispatcher $dispatcher For connecting the event
      * @param string            $captures   RegEx for capturing parameters
      */
-    public function registerListener($dispatcher, $captures) {
+    protected function registerListener($dispatcher, $captures) {
         $this->_captures = $captures;
         $this->_is_command = false;
         $dispatcher->connect("server.command.privmsg", array($this, 'handleIncoming'));
+    }
+
+    /**
+     * Registers another help message with the help event.
+     *
+     * @param sfEventDispatcher $dispatcher The event dispatcher for registering the event
+     * @param string|array      $help_msgs  The message(s) to return when the event is thrown
+     */
+    protected function registerHelpMessage($dispatcher, $help_msgs) {
+        if(is_array($help_msgs)) {
+            $this->_help_msgs = array_merge($this->_help_msgs, $help_msgs);
+        } else {
+            array_push($this->_help_msgs, $help_msgs);
+        }
+
+        if (!$this->_registered_help) {
+            $dispatcher->connect('bot.command.help', array($this, 'handleHelp'));
+            $this->_registered_help = true;
+        }
     }
 
     /**
@@ -84,20 +105,15 @@ abstract class BotPlugin {
     }
 
     /**
-     * Returns the help message for this plugin.
-     *
-     * @see PHiliP\Plugin\BotPlugin#getHelpMessage()
+     * Returns the help message(s) for this plugin.
      */
-    public function getHelpMessage(sfEvent $event) {
+    public function handleHelp(sfEvent $event) {
         $req = $event['request'];
         $src = $req->isPrivateMessage() ? $req->getSource : $req->getSendingUser();
         $helps = array();
 
-        foreach ($this->_help_msg as $msg) {
-            array_push($helps, new Response('PRIVMSG', array(
-                $src,
-                $msg
-            )));
+        foreach ($this->_help_msgs as $msg) {
+            array_push($helps, new Response('PRIVMSG', array($src, $msg)));
         }
 
         $event->setReturnValue($helps);

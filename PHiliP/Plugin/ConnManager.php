@@ -30,16 +30,12 @@ class ConnManager extends BotPlugin {
 
         // Leaves Channels
         $this->registerCommand($dispatcher,
-            'part',
+            array('part','leave'),
             '/(.*)/',
-            '!part <channel-1> ... <channel-n>: Part/Leave the specified rooms'
-        );
-
-        // Leaves Channels
-        $this->registerCommand($dispatcher,
-            'leave',
-            '/(.*)/',
-            '!leave <channel-1> ... <channel-n>: Part/Leave the specified rooms'
+            array(
+                '!part <channel-1> ... <channel-n>: Part/Leave the specified rooms.',
+                '!leave <channel-1> ... <channel-n>: Part/Leave the specified rooms.'
+            )
         );
 
         // Joins Channels
